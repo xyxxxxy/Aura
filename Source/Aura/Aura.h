@@ -3,4 +3,4 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
+#define CUSTOM_DEPTH__RED 250

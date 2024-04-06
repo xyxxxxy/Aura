@@ -5,10 +5,18 @@
 
 #include "../../../../../../../UE/UE_5.2/Engine/Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h"
 #include "../../../../../../../UE/UE_5.2/Engine/Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h"
+#include "Interaction/EnemyInterface.h"
 
 AAuraPlayerControllerBase::AAuraPlayerControllerBase()
 {
 	bReplicates = true;
+}
+
+void AAuraPlayerControllerBase::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();
 }
 
 void AAuraPlayerControllerBase::BeginPlay()
@@ -39,6 +47,48 @@ void AAuraPlayerControllerBase::SetupInputComponent()
 	Super::SetupInputComponent();
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerControllerBase::Move);
+}
+
+void AAuraPlayerControllerBase::CursorTrace()
+{
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECC_Visibility,false,CursorHit);
+	if(!CursorHit.GetActor())return;
+
+	LastActor = ThisActor;
+	ThisActor = Cast<IEnemyInterface>(CursorHit.GetActor());
+	if(LastActor == nullptr)
+	{
+		if(ThisActor != nullptr)
+		{
+			//B
+			ThisActor->HighLightActor();
+		}
+		else
+		{
+			//A
+		}
+	}
+	else // LastActor is valid
+	{
+		if(ThisActor == nullptr)
+		{
+			//C
+			LastActor->UnHighLightActor();
+		}
+		else
+		{
+			if(ThisActor == LastActor)
+			{
+				//E
+			}
+			else
+			{
+				LastActor->UnHighLightActor();
+				ThisActor->HighLightActor();
+			}
+		}
+	}
 }
 
 void AAuraPlayerControllerBase::Move(const FInputActionValue& InputActionValue)
