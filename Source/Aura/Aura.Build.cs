@@ -14,14 +14,14 @@ public class Aura : ModuleRules
 			"EnhancedInput"
 		});
 
-<<<<<<< Updated upstream
+
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
-=======
+
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
-			"GameplayAbilities"，"GameplayTags", "GameplayTasks"
+			"GameplayAbilities","GameplayTags", "GameplayTasks"
 		});
->>>>>>> Stashed changes
+
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

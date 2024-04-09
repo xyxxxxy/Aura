@@ -10,14 +10,13 @@ AAuraCharacterBase::AAuraCharacterBase()
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-<<<<<<< Updated upstream
-=======
+
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
 
->>>>>>> Stashed changes
+
 void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
