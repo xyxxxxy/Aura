@@ -5,6 +5,10 @@
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
+	InitHP(100.f);
+	InitMaxHP(100.f);
+	InitMP(50.f);
+	InitMaxMP(50.f);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
