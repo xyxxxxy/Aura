@@ -12,6 +12,40 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+USTRUCT()
+struct FEffectProperties
+{
+	GENERATED_BODY()
+
+	FEffectProperties(){}
+
+	FGameplayEffectContextHandle EffectContextHandle;
+
+	UPROPERTY()
+	UAbilitySystemComponent* SourceASC = nullptr;
+
+	UPROPERTY()
+	AActor* SourceAvatarActor = nullptr;
+
+	UPROPERTY()
+	AController* SourceController = nullptr;
+
+	UPROPERTY()
+	ACharacter* SourceCharacter = nullptr;
+	
+	UPROPERTY()
+	UAbilitySystemComponent* TargetASC = nullptr;
+
+	UPROPERTY()
+	AActor* TargetAvatarActor = nullptr;
+
+	UPROPERTY()
+	AController* TargetController = nullptr;
+
+	UPROPERTY()
+	ACharacter* TargetCharacter = nullptr;
+};
+
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
 {
@@ -21,32 +55,41 @@ public:
 	UAuraAttributeSet();
 	//用于获取要复制到客户端的属性列表
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	//Base Value表示基础值，Current Value表示临时值, Current Value改变前调用, 对应Infinite和Has Duration的GE
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	//Base Value改变后调用, 对应InstantGE
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = OnRep_HP,Category = "Vital Attribute")
-	FGameplayAttributeData HP;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,HP)
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = OnRep_Health,Category = "Vital Attribute")
+	FGameplayAttributeData Health;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Health)
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = OnRep_MaxHP,Category = "Vital Attribute")
-	FGameplayAttributeData MaxHP;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxHP)
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = OnRep_MaxHealth,Category = "Vital Attribute")
+	FGameplayAttributeData MaxHealth;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxHealth)
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = OnRep_MP,Category = "Vital Attribute")
-	FGameplayAttributeData MP;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MP)
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = OnRep_Mana,Category = "Vital Attribute")
+	FGameplayAttributeData Mana;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Mana)
 	
-	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = OnRep_MaxMP,Category = "Vital Attribute")
-	FGameplayAttributeData MaxMP;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxMP)
+	UPROPERTY(BlueprintReadOnly,ReplicatedUsing = OnRep_MaxMana,Category = "Vital Attribute")
+	FGameplayAttributeData MaxMana;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,MaxMana)
 
 	UFUNCTION()
-	void OnRep_HP(const FGameplayAttributeData& OldHP) const;
+	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
 	
 	UFUNCTION()
-	void OnRep_MaxHP(const FGameplayAttributeData& OldMaxHP) const;
+	void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const;
 	
 	UFUNCTION()
-	void OnRep_MP(const FGameplayAttributeData& OldMP) const;
+	void OnRep_Mana(const FGameplayAttributeData& OldMana) const;
 	
 	UFUNCTION()
-	void OnRep_MaxMP(const FGameplayAttributeData& OldMaxMP) const;
+	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
+
+private:
+	void SetEffectProperties(const FGameplayEffectModCallbackData& Data,FEffectProperties& Props) const;
 };
+
+
