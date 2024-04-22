@@ -22,8 +22,8 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
-	TObjectPtr<IEnemyInterface> LastActor;
-	TObjectPtr<IEnemyInterface> ThisActor;
+	IEnemyInterface* LastActor{nullptr};
+	IEnemyInterface* ThisActor{nullptr};
 	
 private:
 	UPROPERTY(EditAnywhere,Category = "Input")
