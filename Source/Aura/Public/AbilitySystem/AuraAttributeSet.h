@@ -49,8 +49,10 @@ struct FEffectProperties
 };
 
 //typedef TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr FAttributeFuncPtr;
+
+// BindStatic -> TBaseStaticDelegateInstance -> using FFuncPtr = RetValType(*)(ParamTypes..., VarTypes...),目的是拿到带返回值T的函数指针
 template<class T>
-using TStaticFuncPtr = typename TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr;
+using TStaticFuncPtr = typename TBaseStaticDelegateInstance<T,FDefaultDelegateUserPolicy>::FFuncPtr;
 
 
 UCLASS()
@@ -67,6 +69,7 @@ public:
 	//Base Value改变后调用, 对应InstantGE
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
+	//TMap<FGameplayTag,FAttributeSignature> TagsToAttributes;
 	//TMap<FGameplayTag,TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr> TagsToAttributes;
 	//TMap<FGameplayTag,FGameplayAttribute(*)()> TagsToAttributes;
 	TMap<FGameplayTag,TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;

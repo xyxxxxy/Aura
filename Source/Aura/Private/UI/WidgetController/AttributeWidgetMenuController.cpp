@@ -6,6 +6,7 @@
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
 	const UAuraAttributeSet* AS = CastChecked<UAuraAttributeSet>(AttributeSet);
+	
 	for(auto& Pair : AS->TagsToAttributes)
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(

@@ -11,7 +11,11 @@
 UAuraAttributeSet::UAuraAttributeSet()
 {
 	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
-
+	
+	// FAttributeSignature StrengthDelegate;
+	// StrengthDelegate.BindStatic(GetStrengthAttribute);
+	// TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength,StrengthDelegate);
+	
 	/* Primary Attributes */
 	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Strength,GetStrengthAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Intelligence,GetIntelligenceAttribute);
