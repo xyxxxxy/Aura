@@ -5,6 +5,8 @@
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerControllerBase.generated.h"
 
+class UAuraInputConfig;
+struct FGameplayTag;
 struct FInputActionValue;
 class UInputMappingContext;
 class UInputAction;
@@ -33,6 +35,12 @@ private:
 	TObjectPtr<UInputAction> MoveAction;
 
 	void CursorTrace();
-
 	void Move(const FInputActionValue& InputActionValue);
+
+	void AbilityInputTagPressed(FGameplayTag InputTag);
+	void AbilityInputTagReleased(FGameplayTag InputTag);
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+
+	UPROPERTY(EditDefaultsOnly,Category = "Input")
+	TObjectPtr<UAuraInputConfig> InputConfig;
 };

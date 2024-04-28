@@ -1,11 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "Player/AuraPlayerControllerBase.h"
-
-#include "../../../../../../../UE/UE_5.2/Engine/Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h"
-#include "../../../../../../../UE/UE_5.2/Engine/Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h"
+#include "EnhancedInputSubsystems.h"
 #include "Interaction/EnemyInterface.h"
+#include "GameplayTagContainer.h"
+#include "Input/AuraInputComponent.h"
 
 AAuraPlayerControllerBase::AAuraPlayerControllerBase()
 {
@@ -48,8 +46,9 @@ void AAuraPlayerControllerBase::SetupInputComponent()
 {
 
 	Super::SetupInputComponent();
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerControllerBase::Move);
+	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
+	AuraInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerControllerBase::Move);
+	AuraInputComponent->BindAbilityActions(InputConfig,this,&ThisClass::AbilityInputTagPressed,&ThisClass::AbilityInputTagReleased,&ThisClass::AbilityInputTagHeld);
 }
 
 void AAuraPlayerControllerBase::CursorTrace()
@@ -107,4 +106,19 @@ void AAuraPlayerControllerBase::Move(const FInputActionValue& InputActionValue)
 		ControllerPawn->AddMovementInput(ForwardDir,InputAxisVector.Y);
 		ControllerPawn->AddMovementInput(RightDir,InputAxisVector.X);
 	}
+}
+
+void AAuraPlayerControllerBase::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(1,3.f,FColor::Red,*InputTag.ToString());
+}
+
+void AAuraPlayerControllerBase::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(1,3.f,FColor::Blue,*InputTag.ToString());
+}
+
+void AAuraPlayerControllerBase::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(1,3.f,FColor::Green,*InputTag.ToString());
 }
