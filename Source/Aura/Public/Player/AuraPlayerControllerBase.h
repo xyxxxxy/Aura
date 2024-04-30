@@ -5,6 +5,8 @@
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerControllerBase.generated.h"
 
+class USplineComponent;
+class UAuraAbilitySystemComponent;
 class UAuraInputConfig;
 struct FGameplayTag;
 struct FInputActionValue;
@@ -24,8 +26,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
-	IEnemyInterface* LastActor{nullptr};
-	IEnemyInterface* ThisActor{nullptr};
+
 	
 private:
 	UPROPERTY(EditAnywhere,Category = "Input")
@@ -34,13 +35,36 @@ private:
 	UPROPERTY(EditAnywhere,Category = "Input")
 	TObjectPtr<UInputAction> MoveAction;
 
-	void CursorTrace();
 	void Move(const FInputActionValue& InputActionValue);
 
+	void CursorTrace();
+	FHitResult CursorHit;
+	IEnemyInterface* LastActor{nullptr};
+	IEnemyInterface* ThisActor{nullptr};
+	
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
 	void AbilityInputTagHeld(FGameplayTag InputTag);
 
 	UPROPERTY(EditDefaultsOnly,Category = "Input")
 	TObjectPtr<UAuraInputConfig> InputConfig;
+
+	UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+
+	UAuraAbilitySystemComponent* GetASC();
+
+	FVector CachedDestination = FVector::ZeroVector;
+	float FollowTime = 0.f;
+	float ShortPressThreshold = .5f;
+	bool bAutoRunning = false;
+	bool bTargeting = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius = 50.f;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> Spline;
+
+	void AutoRun();
 };
