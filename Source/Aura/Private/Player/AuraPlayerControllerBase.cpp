@@ -39,8 +39,7 @@ void AAuraPlayerControllerBase::BeginPlay()
 	{
 		Subsystem->AddMappingContext(AuraContext,0);
 	}
-
-
+	
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
 
@@ -56,12 +55,13 @@ void AAuraPlayerControllerBase::SetupInputComponent()
 	Super::SetupInputComponent();
 	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
 	AuraInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerControllerBase::Move);
+	AuraInputComponent->BindAction(ShiftAction,ETriggerEvent::Started,this,&AAuraPlayerControllerBase::ShiftPressed);
+	AuraInputComponent->BindAction(ShiftAction,ETriggerEvent::Completed,this,&AAuraPlayerControllerBase::ShiftReleased);
 	AuraInputComponent->BindAbilityActions(InputConfig,this,&ThisClass::AbilityInputTagPressed,&ThisClass::AbilityInputTagReleased,&ThisClass::AbilityInputTagHeld);
 }
 
 void AAuraPlayerControllerBase::CursorTrace()
 {
-	
 	GetHitResultUnderCursor(ECC_Visibility,false,CursorHit);
 	if(!CursorHit.GetActor())return;
 
@@ -114,13 +114,8 @@ void AAuraPlayerControllerBase::AbilityInputTagReleased(FGameplayTag InputTag)
 		GetASC()->AbilityInputTagReleased(InputTag);
 		return;
 	}
-	GetASC()->AbilityInputTagReleased(InputTag);
-	
-	if (bTargeting)
-	{
-		GetASC()->AbilityInputTagReleased(InputTag);
-	}
-	else
+	if(GetASC())GetASC()->AbilityInputTagReleased(InputTag);
+	if (!bTargeting && !bShiftKeyDown)
 	{
 		const APawn* ControllerPawn = GetPawn();
 		if(FollowTime <= ShortPressThreshold && ControllerPawn)
@@ -152,7 +147,7 @@ void AAuraPlayerControllerBase::AbilityInputTagHeld(FGameplayTag InputTag)
 			return;
 		}
 	}
-	if (bTargeting)
+	if (bTargeting || bShiftKeyDown)
 	{
 		if(GetASC())
 		{
