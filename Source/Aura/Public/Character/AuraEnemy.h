@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -21,6 +20,7 @@ public:
 	virtual void HighLightActor() override;
 	virtual void UnHighLightActor() override;
 	virtual int32 GetPlayerLevel() override;
+	virtual void Die() override;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangedSignature OnHealthChanged;
@@ -35,6 +35,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly,Category = "Combat")
 	float BaseWalkSpeed = 250.f;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Combat")
+	float LifeSpan = 5.f;
 
 protected:
 	virtual void BeginPlay() override;

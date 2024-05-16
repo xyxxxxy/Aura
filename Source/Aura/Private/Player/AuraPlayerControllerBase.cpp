@@ -9,7 +9,9 @@
 #include "NavigationSystem.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
+#include "GameFramework/Character.h"
 #include "Input/AuraInputComponent.h"
+#include "UI/Widget/DamageTextComponent.h"
 
 AAuraPlayerControllerBase::AAuraPlayerControllerBase()
 {
@@ -26,14 +28,26 @@ void AAuraPlayerControllerBase::PlayerTick(float DeltaTime)
 	AutoRun();
 }
 
+void AAuraPlayerControllerBase::ShowDamageNumber_Implementation(float DamageAmount,ACharacter* TargetCharacter,const FDamageTypes& InDamageTypes)
+{
+	if(IsValid(TargetCharacter) && DamageTextComponentClass)
+	{
+		UDamageTextComponent* DamageTextComp = NewObject<UDamageTextComponent>( TargetCharacter,DamageTextComponentClass);
+		if(!DamageTextComp)return;
+		DamageTextComp->RegisterComponent();
+		DamageTextComp->AttachToComponent(TargetCharacter->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform);
+		DamageTextComp->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		DamageTextComp->SetDamageText(DamageAmount,InDamageTypes);
+	}
+}
+
 void AAuraPlayerControllerBase::BeginPlay()
 {
 	Super::BeginPlay();
 
 	check(AuraContext);
 
-	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::
-	GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	
 	if(Subsystem)
 	{

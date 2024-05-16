@@ -1,7 +1,7 @@
 
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
-
 #include "AbilitySystemComponent.h"
+#include "AuraAbilityTypes.h"
 #include "Game/AuraGameModeBase.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "Kismet/GameplayStatics.h"
@@ -43,10 +43,7 @@ UAttributeMenuWidgetController* UAuraAbilitySystemLibrary::GetAttributeMenuWidge
 
 void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* WorldContextUObject,ECharacterClass CharacterClass, float Level,UAbilitySystemComponent* ASC)
 {
-	const AAuraGameModeBase* AuraGameModeBase = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextUObject));
-	if(AuraGameModeBase == nullptr)return;
-
-	UCharacterClassInfo* CharacterClassInfo = AuraGameModeBase->CharacterClassInfo;
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextUObject);
 	
 	const FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 	const AActor* AvatarActor = ASC->GetAvatarActor();
@@ -70,10 +67,8 @@ void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* World
 
 void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextUObject, UAbilitySystemComponent* ASC)
 {
-	const AAuraGameModeBase* AuraGameModeBase = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextUObject));
-	if(AuraGameModeBase == nullptr)return;
-
-	UCharacterClassInfo* CharacterClassInfo = AuraGameModeBase->CharacterClassInfo;
+	
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextUObject);
 
 	for(TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
 	{
@@ -81,3 +76,31 @@ void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContext
 		ASC->GiveAbility(AbilitySpec);
 	}
 }
+
+UCharacterClassInfo* UAuraAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextUObject)
+{
+	const AAuraGameModeBase* AuraGameModeBase = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextUObject));
+	if(AuraGameModeBase == nullptr)return nullptr;
+	return AuraGameModeBase->CharacterClassInfo;
+}
+
+void UAuraAbilitySystemLibrary::SetDamageTypes(FGameplayEffectContextHandle& EffectContextHandle,
+	const FDamageTypes& InDamageTypes)
+{
+	if(FAuraGameplayEffectContext* AuraGameplayEffectContext = static_cast<FAuraGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		AuraGameplayEffectContext->SetDamageTypes(InDamageTypes);
+	}
+}
+
+FDamageTypes UAuraAbilitySystemLibrary::GetDamageTypes(FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if(FAuraGameplayEffectContext* AuraGameplayEffectContext = static_cast<FAuraGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return AuraGameplayEffectContext->GetDamageTypes();
+	}
+	return FDamageTypes();
+}
+
+
+

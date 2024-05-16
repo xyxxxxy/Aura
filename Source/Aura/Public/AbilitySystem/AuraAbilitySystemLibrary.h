@@ -2,6 +2,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AuraAbilityTypes.h"
+#include "GameplayEffectTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Data/CharacterClassInfo.h"
 #include "AuraAbilitySystemLibrary.generated.h"
@@ -27,5 +29,15 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category = "AuraAbilitySystemLibrary|CharacterClassDefaults")
 	static void GiveStartupAbilities(const UObject* WorldContextUObject,UAbilitySystemComponent* ASC);
+
+	UFUNCTION(BlueprintCallable,Category = "AuraAbilitySystemLibrary|CharacterClassDefaults")
+	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextUObject);
+
+	UFUNCTION(BlueprintCallable,Category = "AuraAbilitySystemLibrary|GameplayEffects")
+	static void SetDamageTypes(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle,const FDamageTypes& InDamageTypes);
+
+	UFUNCTION(BlueprintPure,Category = "AuraAbilitySystemLibrary|GameplayEffects")
+	static FDamageTypes GetDamageTypes(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle);
 	
+
 };

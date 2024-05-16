@@ -2,9 +2,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AuraAbilityTypes.h"
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerControllerBase.generated.h"
 
+class UDamageTextComponent;
 class USplineComponent;
 class UAuraAbilitySystemComponent;
 class UAuraInputConfig;
@@ -22,6 +24,9 @@ class AURA_API AAuraPlayerControllerBase : public APlayerController
 public:
 	AAuraPlayerControllerBase();
 	virtual void PlayerTick(float DeltaTime) override;
+
+	UFUNCTION(Client,Reliable)
+	void ShowDamageNumber(float DamageAmount,ACharacter* TargetCharacter,const FDamageTypes& InDamageTypes);
 	
 protected:
 	virtual void BeginPlay() override;
@@ -73,4 +78,7 @@ private:
 	TObjectPtr<USplineComponent> Spline;
 
 	void AutoRun();
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
 };
