@@ -95,7 +95,12 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	const float CriticalHitResistanceCoefficient = TargetCriticalHitResistanceCurve->Eval(TargetCombatInterface->GetPlayerLevel());
 
 	// Get damage set by caller
-	float Damage = Spec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
+	float Damage = 0.f;
+
+	for(auto& Pair : FAuraGameplayTags::Get().DamageTypesToResistances)
+	{
+		Damage += Spec.GetSetByCallerMagnitude(Pair.Key);
+	}
 	
 	// If block,halve the damage
 	const bool bBlockedHit = FMath::RandRange(1,100) < TargetBlockChance;
