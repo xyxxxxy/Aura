@@ -143,7 +143,14 @@ void AAuraPlayerControllerBase::AbilityInputTagReleased(FGameplayTag InputTag)
 				Spline->AddSplinePoint(PointLoc,ESplineCoordinateSpace::World);
 			}
 			// Ignore NavPath Last Point，Prevents mouse clicks from being located outside the navigation Mesh
-			CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1];
+			if(NavPath->PathPoints.Num()>0)
+			{
+				CachedDestination = NavPath->PathPoints[NavPath->PathPoints.Num() - 1];
+			}
+			else
+			{
+				CachedDestination = NavPath->PathPoints[0];
+			}
 			bAutoRunning = true;
 		}
 		FollowTime = 0.f;
