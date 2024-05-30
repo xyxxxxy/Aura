@@ -11,6 +11,8 @@ class AURA_API AAuraCharacter : public AAuraCharacterBase
 	GENERATED_BODY()
 
 public:
+
+	AAuraCharacter();
 	//server
 	virtual void PossessedBy(AController* NewController) override;
 	//client

@@ -7,6 +7,11 @@
 #include "Player/AuraPlayerState.h"
 #include "UI/HUD/AuraHUD.h"
 
+AAuraCharacter::AAuraCharacter()
+{
+	Tags.Add(FName("Player"));
+}
+
 void AAuraCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
