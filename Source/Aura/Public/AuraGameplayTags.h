@@ -63,7 +63,29 @@ public:
 
 	TMap<FGameplayTag,FGameplayTag> DamageTypesToResistances;
 
+	/**
+	 * Effects
+	 */
 	FGameplayTag Effects_HitReact;
+
+	/**
+	 *  Abilities
+	 */
+	FGameplayTag Abilities_Attack;
+
+	FGameplayTag Abilities_Fire_FireBolt;
+
+	/**
+	 *  Montage
+	 */
+	FGameplayTag Montage_Attack_Weapon;
+	FGameplayTag Montage_Attack_LeftHand;
+	FGameplayTag Montage_Attack_RightHand;
+
+protected:
+
+	void AddAllTags(UGameplayTagsManager& Manager);
+	void AddTag(FGameplayTag& OutTag,const ANSICHAR* TagName,const ANSICHAR* TagComment);
 	
 private:
 	static FAuraGameplayTags GameplayTags;

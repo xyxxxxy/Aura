@@ -24,6 +24,9 @@ public:
 	virtual void UnHighLightActor() override;
 	virtual int32 GetPlayerLevel() override;
 	virtual void Die() override;
+	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
+	virtual void SetCombatTarget_Implementation(AActor* TargetActor) override;
+	virtual AActor* GetCombatTarget_Implementation() override;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangedSignature OnHealthChanged;
@@ -36,11 +39,14 @@ public:
 	UPROPERTY(BlueprintReadOnly,Category = "Combat")
 	bool bHitReacting = false;
 
-	UPROPERTY(BlueprintReadOnly,Category = "Combat")
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Combat")
 	float BaseWalkSpeed = 250.f;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Combat")
 	float LifeSpan = 5.f;
+
+	UPROPERTY(BlueprintReadWrite,Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
 
 protected:
 	virtual void BeginPlay() override;

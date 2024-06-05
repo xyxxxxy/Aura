@@ -65,11 +65,30 @@ void AAuraEnemy::Die()
 	Super::Die();
 }
 
+FVector AAuraEnemy::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
+{
+	return Super::GetCombatSocketLocation_Implementation(MontageTag);
+}
+
+void AAuraEnemy::SetCombatTarget_Implementation(AActor* TargetActor)
+{
+	CombatTarget = TargetActor;
+}
+
+AActor* AAuraEnemy::GetCombatTarget_Implementation()
+{
+	return CombatTarget;
+}
+
 void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
 {
 	bHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
-	AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"),bHitReacting);
+	
+	if(AuraAIController && AuraAIController->GetBlackboardComponent())
+	{
+		AuraAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"),bHitReacting);
+	}
 }
 
 void AAuraEnemy::BeginPlay()
@@ -81,7 +100,7 @@ void AAuraEnemy::BeginPlay()
 	
 	if(HasAuthority())
 	{
-		UAuraAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent);
+		UAuraAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent,CharacterClass);
 	}
 	
 

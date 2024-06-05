@@ -9,7 +9,7 @@
 class UInputAction;
 
 USTRUCT(BlueprintType)
-struct FAuraInputAction
+struct FTaggedInputAction
 {
 	GENERATED_BODY()
 
@@ -30,6 +30,6 @@ public:
 	const UInputAction* FindAbilityInputActionForTag(const FGameplayTag& InputTag,bool bLogNotFound = false) const;
 
 	UPROPERTY(EditDefaultsOnly)
-	TArray<FAuraInputAction> AbilityInputAction;
+	TArray<FTaggedInputAction> AbilityInputAction;
 	
 };

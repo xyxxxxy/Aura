@@ -28,8 +28,8 @@ public:
 	static void InitializeDefaultAttributes(const UObject* WorldContextUObject,ECharacterClass CharacterClass,float Level,UAbilitySystemComponent* ASC);
 
 	UFUNCTION(BlueprintCallable,Category = "AuraAbilitySystemLibrary|CharacterClassDefaults")
-	static void GiveStartupAbilities(const UObject* WorldContextUObject,UAbilitySystemComponent* ASC);
-
+	static void GiveStartupAbilities(const UObject* WorldContextUObject,UAbilitySystemComponent* ASC,ECharacterClass CharacterClass);
+	
 	UFUNCTION(BlueprintCallable,Category = "AuraAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextUObject);
 
@@ -38,6 +38,11 @@ public:
 
 	UFUNCTION(BlueprintPure,Category = "AuraAbilitySystemLibrary|GameplayEffects")
 	static FDamageTypes GetDamageTypes(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle);
-	
+
+	UFUNCTION(BlueprintCallable,Category = "AuraAbilitySystemLibrary|GameplayMechanics")
+	static void GetLivePlayersWithRadius(const UObject* WorldContextObject,TArray<AActor*>& OutOverlappingActors,const TArray<AActor*> ActorsToIgnore,float Radius,const FVector& SphereOrigin);
+
+	UFUNCTION(BlueprintPure,Category = "AuraAbilitySystemLibrary|GameplayMechanics")
+	static bool IsNotFriend(const AActor* FirstActor,const AActor* SecondActor);
 
 };

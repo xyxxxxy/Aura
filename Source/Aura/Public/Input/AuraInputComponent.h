@@ -23,7 +23,7 @@ void UAuraInputComponent::BindAbilityActions(const UAuraInputConfig* InputConfig
 {
 	check(InputConfig);
 
-	for(const FAuraInputAction& Action : InputConfig->AbilityInputAction)
+	for(const FTaggedInputAction& Action : InputConfig->AbilityInputAction)
 	{
 		if(Action.InputAction && Action.InputTag.IsValid())
 		{

@@ -4,7 +4,7 @@
 const UInputAction* UAuraInputConfig::FindAbilityInputActionForTag(const FGameplayTag& InputTag,
 	bool bLogNotFound) const
 {
-	for(const FAuraInputAction& Action : AbilityInputAction)
+	for(const FTaggedInputAction& Action : AbilityInputAction)
 	{
 		if(Action.InputAction && Action.InputTag == InputTag)
 		{
